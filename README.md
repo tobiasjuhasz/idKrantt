@@ -1,3 +1,5 @@
+> :warning: **You are on development branch**: things might not work well!
+
 # idKrantt
 Intelligent Designs by Krantt. We built it in a better way for you.
 
