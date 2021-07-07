@@ -10,11 +10,5 @@ It will take a very long time until it's full ready and in-production, but in th
 ## Imprtant.
 We know that's not cool for bkend people work with frontend tools, but it's not alike any other. Expect us.
 
-## Buy us a Coffee <3
-So... we are doing this everything in a non-profit way, if you can give us a hand for keep working on it we will thank you a lot
-
-https://www.buymeacoffee.com/tobiasjuhasz
-
-
 ### OK... wait a minute before you go
 I'll tell you the reason why we don't have this in the Krantt's github organization. My partners doesn't know anything yet about this project and they do not use github for anything. So I'm all alone on it but..! I hope to have something amazing before x-mas <3
