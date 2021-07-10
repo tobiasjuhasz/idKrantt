@@ -14,20 +14,96 @@ figma.showUI(__html__);
 figma.ui.onmessage = msg => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
-  if (msg.type === 'create-rectangles') {
-    const nodes: SceneNode[] = [];
-    for (let i = 0; i < msg.count; i++) {
-      const rect = figma.createRectangle();
-      rect.x = i * 150;
-      rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-      figma.currentPage.appendChild(rect);
-      nodes.push(rect);
+  
+  if (msg.type === 'create-json') {
+    var nodes = new Array();
+    for (const node of figma.currentPage.selection) {
+      nodes.push(json_from_node(node));
     }
-    figma.currentPage.selection = nodes;
-    figma.viewport.scrollAndZoomIntoView(nodes);
+    figma.ui.postMessage(JSON.stringify(nodes));
   }
 
   // Make sure to close the plugin when you're done. Otherwise the plugin will
   // keep running, which shows the cancel button at the bottom of the screen.
-  figma.closePlugin();
 };
+
+function json_from_node(node: SceneNode){
+        console.log(node);
+        // We will create a new json object
+        var json_node = {
+          name: node.name,
+          absoluteTransform: node.absoluteTransform,
+          backgroundStyleId: node.backgroundStyleId,
+          backgrounds: node.backgrounds,
+          blendMode: node.blendMode,
+          bottomLeftRadius: node.bottomLeftRadius,
+          bottomRightRadius: node.bottomRightRadius,
+          clipsContent: node.clipsContent,
+          constrainProportions: node.constrainProportions,
+          constraints: node.constraints,
+          cornerRadius: node.cornerRadius,
+          cornerSmoothing: node.cornerSmoothing,
+          counterAxisAlignItems: node.counterAxisAlignItems,
+          counterAxisSizingMode: node.counterAxisSizingMode,
+          dashPattern: node.dashPattern,
+          effectStyleId: node.effectStyleId,
+          effects: node.effects,
+          expanded: node.expanded,
+          exportSettings: node.exportSettings,
+          fillStyleId: node.fillStyleId,
+          fills: node.fills,
+          gridStyleId: node.gridStyleId,
+          guides: node.guides,
+          height: node.height,
+          isMask: node.isMask,
+          itemSpacing: node.itemSpacing,
+          layoutAlign: node.layoutAlign,
+          layoutGrids: node.layoutGrids,
+          layoutGrow: node.layoutGrow,
+          layoutMode: node.layoutMode,
+          locked: node.locked,
+          numberOfFixedChildren: node.numberOfFixedChildren,
+          opacity: node.opacity,
+          overflowDirection: node.overflowDirection,
+          overlayBackground: node.overlayBackground,
+          overlayBackgroundInteraction: node.overlayBackgroundInteraction,
+          overlayPositionType: node.overlayPositionType,
+          paddingBottom: node.paddingBottom,
+          paddingLeft: node.paddingLeft,
+          paddingRight: node.paddingRight,
+          paddingTop: node.paddingTop,
+          parent: node.parent,
+          primaryAxisAlignItems: node.primaryAxisAlignItems,
+          primaryAxisSizingMode: node.primaryAxisSizingMode,
+          reactions: node.reactions,
+          relativeTransform: node.relativeTransform,
+          removed: node.removed,
+          rotation: node.rotation,
+          strokeAlign: node.strokeAlign,
+          strokeCap: node.strokeCap,
+          strokeJoin: node.strokeJoin,
+          strokeMiterLimit: node.strokeMiterLimit,
+          strokeStyleId: node.strokeStyleId,
+          strokeWeight: node.strokeWeight,
+          strokes: node.strokes,
+          topLeftRadius: node.topLeftRadius,
+          topRightRadius: node.topRightRadius,
+          visible: node.visible,
+          width: node.width,
+          x: node.x,
+          y: node.y,
+        }
+          var children = [];
+          if(node.children !== undefined)
+            Object.entries(node.children).forEach(c => {
+              console.log(c[1]);
+              var child = c[1];
+              if(child !== undefined)
+                var theChild = json_from_node(child); 
+                children.push([theChild]);
+            });
+        
+        json_node["children"] = children;
+
+        return json_node;
+}
