@@ -1,0 +1,39 @@
+<style>
+  *{
+    font-family: "Poppins", sans-serif;
+  }
+</style>
+
+<h1>Creating a JSON</h1>
+<button type="button" id="create-json">Create JSON</button><br>
+
+<textarea id="JSON" placeholder="Click the button to start..." ></textarea>
+
+<p>Count: <input id="count" value="5"></p>
+  <button id="create">Create</button>
+  <button id="cancel">Cancel</button>
+<script>
+
+document.getElementById('create').onclick = () => {
+  const textbox = document.getElementById('count');
+  const count = parseInt(textbox.value, 10);
+  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
+}
+
+document.getElementById('create-json').onclick = () => {
+  const json_text = parent.postMessage({ pluginMessage: { type: 'create-json' } }, '*')
+
+  textarea.value = json_text;
+}
+
+document.getElementById('cancel').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*')
+}
+
+onmessage = (event) => {
+    const textarea = document.getElementById('JSON');
+
+    console.log(event.data.pluginMessage);
+}
+
+</script>
