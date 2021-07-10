@@ -9,10 +9,21 @@
 
 <textarea id="JSON" placeholder="Click the button to start..." ></textarea>
 
+<p>Count: <input id="count" value="5"></p>
+  <button id="create">Create</button>
+  <button id="cancel">Cancel</button>
 <script>
 
+document.getElementById('create').onclick = () => {
+  const textbox = document.getElementById('count');
+  const count = parseInt(textbox.value, 10);
+  parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*')
+}
+
 document.getElementById('create-json').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'create-json' } }, '*')
+  const json_text = parent.postMessage({ pluginMessage: { type: 'create-json' } }, '*')
+
+  textarea.value = json_text;
 }
 
 document.getElementById('cancel').onclick = () => {
@@ -22,7 +33,7 @@ document.getElementById('cancel').onclick = () => {
 onmessage = (event) => {
     const textarea = document.getElementById('JSON');
 
-    textarea.value = event.data.pluginMessage;
+    console.log(event.data.pluginMessage);
 }
 
 </script>

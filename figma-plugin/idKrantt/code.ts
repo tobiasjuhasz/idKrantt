@@ -14,12 +14,13 @@ figma.showUI(__html__);
 figma.ui.onmessage = msg => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
-  
+
   if (msg.type === 'create-json') {
     var nodes = new Array();
     for (const node of figma.currentPage.selection) {
       nodes.push(json_from_node(node));
     }
+
     figma.ui.postMessage(JSON.stringify(nodes));
   }
 
@@ -29,9 +30,11 @@ figma.ui.onmessage = msg => {
 
 function json_from_node(node: SceneNode){
         console.log(node);
-        // We will create a new json object
+        // We create a new json object
         var json_node = {
+          text: node.text,
           name: node.name,
+          type: node.type,
           absoluteTransform: node.absoluteTransform,
           backgroundStyleId: node.backgroundStyleId,
           backgrounds: node.backgrounds,
@@ -96,14 +99,15 @@ function json_from_node(node: SceneNode){
           var children = [];
           if(node.children !== undefined)
             Object.entries(node.children).forEach(c => {
-              console.log(c[1]);
               var child = c[1];
-              if(child !== undefined)
+              if(child !== undefined){
                 var theChild = json_from_node(child); 
-                children.push([theChild]);
+                children.push(theChild);
+              }
             });
-        
-        json_node["children"] = children;
+
+        if (children !== [])
+          json_node["children"] = children;
 
         return json_node;
 }
