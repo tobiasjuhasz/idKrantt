@@ -10,7 +10,7 @@ import json
 import os, sys, re
 
 class __main__:
-    def __init__(self, JSON_FOLDER=None, JSON={}):
+    def __init__(self, JSON_FOLDER=cfg.figmap, JSON={}):
         self.json_dict = __main__.read(JSON_FOLDER, JSON)
         
     def read(JSON_FOLDER = "", JSON={}):
@@ -40,20 +40,31 @@ class __main__:
                 for attr in e:
                     if attr != "children":
                         print(attr,":", e[attr])
-                        
-    # Returns a string based on a CSS format from an JSON obj
-    # JSON = { '.something || #something':{ 'attribute': 'params' } }
-    # Returns = ".something || #something  { attribute: params; }"
+    # INPUT : { '#btn1':{ 'background': 'red', 'border-radius': '1rem' } }
+    # OUTPUT: "#btn1{ background: red; border-radius: 1rem; }"
     def css_sify(self, obj):
         # I'll take the object and dump it.
-        string = json.dumps(obj)
+        css = ""
         for e in obj:
             string = json.dumps(e) + json.dumps(obj[e])
-            string = re.sub('"', '', re.sub(r'}$', ';}', re.sub(',', ';', string)))
-            print(string)
+            css += re.sub('"', '', re.sub(r'}$', ';}', re.sub(',', ';', string)))
             
-        return string
-        
+        return css
+    
+    # Since we are working with dictionaries there is no need of a filter_css function()
+    # Desprecated
+    def filter_css(self, obj):
+        return obj
+    
+    
+    # On this case we must be working with arrays, since a dictionary can't repeat some of things..
+    # INPUT: '[{ 'div':{ 'id':'', 'class':'', 'child': [ {'div': {}}, {'div':{}} ] } }]'
+    # OUTPUT: '<div id="" class=""><div></div><div></div></div>'
+    def html_sify(self, arr):
+        for e in arr:
+            for attr in e:
+                if attr != "child":
+                    
     def __attr_list__(self):
         obj = self.json_dict
         for e in obj:
