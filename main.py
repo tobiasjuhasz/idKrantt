@@ -61,10 +61,35 @@ class __main__:
     # INPUT: '[{ 'div':{ 'id':'', 'class':'', 'child': [ {'div': {}}, {'div':{}} ] } }]'
     # OUTPUT: '<div id="" class=""><div></div><div></div></div>'
     def html_sify(self, arr):
+        html = ""
         for e in arr:
-            for attr in e:
-                if attr != "child":
+            for tag in e:
+                if tag != "input":
+                    html += "<" + tag
                     
+                    for attr in e[tag]:
+                        if attr != "child":
+                            html += " " + attr +  '="' + e[tag][attr] + '"'
+                        else:
+                            pass
+                        
+                    html += ">"
+                    
+                    for attr in e[tag]:
+                        if attr == "child":
+                            html += __main__.html_sify(self, e[tag][attr])
+                        else:
+                            pass
+                        
+                    html += "</"+tag+">"
+                else: 
+                    html += "<" + tag
+                    for attr in e[tag]:
+                        html += " " + attr +  '="' + e[tag][attr] + '"'
+                    html += " />"
+
+        return html
+    
     def __attr_list__(self):
         obj = self.json_dict
         for e in obj:
